@@ -9,6 +9,16 @@ def wrapper(func, file, skip, nrow, usecolumn, gender, month):
 
 
 def func(datafr, file, skip, nrow, usecolumn, gender, month):
+    '''
+    :param datafr: Pass in a dataframe to be appended.
+    :param file: Which excel file to read
+    :param skip: How many lines to skip for this part
+    :param nrow: How many rows to read
+    :param usecolumn: Which cols to read
+    :param gender: Which gender (manual)
+    :param month: Which month (manual)
+    :return:
+    '''
     df_temp = pd.read_excel(file, index_col=None, skiprows=skip, nrows=nrow, usecols=usecolumn, header=None, names=['name', 'count_name'])
     df_temp['gender'] = gender
     df_temp['month'] = month
@@ -49,3 +59,9 @@ df = func(datafr=df, file='2019girlsnames.xlsx', skip=36, nrow=10, usecolumn='J:
 df = func(datafr=df, file='2019girlsnames.xlsx', skip=36, nrow=12, usecolumn='N:O', gender='Female', month=12)
 
 df['count_name'] = df['count_name'].astype(int)
+
+df_rank = df.groupby(['gender', 'name']).sum()
+df_rank = df_rank.reset_index()
+df_rank['2019_rank'] = df_rank.groupby(['gender'])['count_name'].rank('dense', ascending=False)
+df_rank.sort_values(by=['gender', '2019_rank'], ascending=[True, True], inplace=True)
+
