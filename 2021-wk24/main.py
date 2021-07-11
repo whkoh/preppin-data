@@ -18,4 +18,3 @@ for i in pd.date_range(start='2021-04-01', end='2021-05-31'):
 
 final_df = days_df.merge(days_out_df, how='left', on='Days_Absence')
 final_df.fillna(0, inplace=True)
-print('')
