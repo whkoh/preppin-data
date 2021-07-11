@@ -13,14 +13,9 @@ days_out_df = out_df.groupby(['Days_Absence']).count()
 days_out_df.reset_index(inplace=True)
 
 days_df = pd.DataFrame(columns=['Days_Absence'])
-days_df.reset_index(inplace=True)
 for i in pd.date_range(start='2021-04-01', end='2021-05-31'):
     days_df.loc[len(days_df)] = i
 
-print(days_df.dtypes)
-print(days_out_df.dtypes)
-
-final_df = days_df.merge(days_out_df, on='Days_Absence')
-final_df = final_df.fillna(0, inplace=True)
-
+final_df = days_df.merge(days_out_df, how='left', on='Days_Absence')
+final_df.fillna(0, inplace=True)
 print('')
